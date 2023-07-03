@@ -9,25 +9,31 @@ import java.util.List;
 
 @Component
 public class UserDAOService {
-    private static List<User> users = new ArrayList<>();
     private static int userCount = 0;
+    private static List<User> users = new ArrayList<>();
+
     static {
         users.add(new User(++userCount,"Adam", LocalDate.now().minusYears(30)));
         users.add(new User(++userCount,"William", LocalDate.now().minusYears(23)));
         users.add(new User(++userCount,"Samuel", LocalDate.now().minusYears(24)));
         users.add(new User(++userCount,"Jason", LocalDate.now().minusYears(14)));
     }
+
     public static List<User> findAll(){
         return users;
     }
-    public static User findById(int id){
-        return users.stream().filter(user -> user.getId().equals(id)).findFirst().get();
+    public User findById(int id){
+        return users.stream().filter(user -> user.getId().equals(id)).findFirst().orElse(null);
     }
 
-    public static User save(User user){
+    public User save(User user){
         user.setId(++userCount);
         users.add(user);
         return user;
+    }
+
+    public void deleteById(int id){
+        users.removeIf(user -> user.getId().equals(id));
     }
 
 }
